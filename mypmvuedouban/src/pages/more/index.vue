@@ -48,16 +48,16 @@ export default {
   methods: {
     async getDataList() {
       var res = await wxrequest({
-        url: `${this.url}${this.type}?${this.apikey}&start=1$count=4`,
+        url: `${this.url}${this.type}?${this.apikey}&start=${
+          this.start
+        }&count=${this.count}`,
         header: {
           "content-type": "json"
         }
       });
       console.log(res);
-
       let { statusCode, data } = res;
       if (statusCode === 200) {
-        console.log("111");
         data.subjects.forEach(item => {
           // 添加星星数
           item.start = Math.round(item.rating.average / 2);
@@ -85,6 +85,15 @@ export default {
         this.title = "即将上映";
         break;
     }
+    this.getDataList();
+  },
+  // 上拉触底事件
+  onReachBottom() {
+    // 请求下一页的数据
+    // 修改开始数据
+    this.start += this.count;
+    console.log(this.start);
+    // 重新请求数据源
     this.getDataList();
   }
 };
