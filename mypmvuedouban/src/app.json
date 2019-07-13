@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/movieList/main",
+    "pages/more/main",
     "pages/index/main",
     "pages/logs/main"
   ],
