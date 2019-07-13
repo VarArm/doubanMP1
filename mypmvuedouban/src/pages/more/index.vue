@@ -48,24 +48,31 @@ export default {
   methods: {
     async getDataList() {
       var res = await wxrequest({
-        url: `${this.url}${this.type}?${this.apikey}&start=${
-          this.start
-        }$count=${this.count}`,
+        url: `${this.url}${this.type}?${this.apikey}&start=1$count=4`,
         header: {
           "content-type": "json"
         }
       });
+      console.log(res);
+
       let { statusCode, data } = res;
       if (statusCode === 200) {
+        console.log("111");
         data.subjects.forEach(item => {
+          // 添加星星数
           item.start = Math.round(item.rating.average / 2);
+          // 分类保留一位小数
           item.rating.average = item.rating.average.toFixed(1);
         });
-        this.dataList = [...this.dataList, ...this.subjects];
+        this.dataList = [...this.dataList, ...data.subjects];
+        console.log(this.dataList);
       }
     }
   },
   onLoad(options) {
+    this.start = 0;
+    this.count = 9;
+    this.dataList = [];
     this.type = options.type;
     switch (this.type) {
       case "in_theaters":
