@@ -47,6 +47,7 @@ export default {
   },
   methods: {
     async getDataList() {
+      wx.showNavigationBarLoading();
       var res = await wxrequest({
         url: `${this.url}${this.type}?${this.apikey}&start=${
           this.start
@@ -66,6 +67,10 @@ export default {
         });
         this.dataList = [...this.dataList, ...data.subjects];
         console.log(this.dataList);
+        // 关闭下拉背景
+        wx.stopPullDownRefresh();
+        // 关闭小菊花
+        wx.hideNavigationBarLoading();
       }
     }
   },
@@ -94,6 +99,15 @@ export default {
     this.start += this.count;
     console.log(this.start);
     // 重新请求数据源
+    this.getDataList();
+  },
+  // 下拉刷新事件
+  onPullDownRefresh() {
+    // 将原始数据清空
+    this.start = 0;
+    this.count = 9;
+    this.dataList = [];
+    // 重新请求数据
     this.getDataList();
   }
 };
